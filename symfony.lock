@@ -17,6 +17,9 @@
     "doctrine/common": {
         "version": "3.3.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.5.3"
+    },
     "doctrine/dbal": {
         "version": "3.3.5"
     },
@@ -35,6 +38,18 @@
             "config/packages/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -79,6 +94,9 @@
     },
     "laminas/laminas-code": {
         "version": "4.5.1"
+    },
+    "nikic/php-parser": {
+        "version": "v4.13.2"
     },
     "psr/cache": {
         "version": "3.0.0"
@@ -176,6 +194,15 @@
     },
     "symfony/http-kernel": {
         "version": "v6.0.8"
+    },
+    "symfony/maker-bundle": {
+        "version": "1.40",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.25.0"

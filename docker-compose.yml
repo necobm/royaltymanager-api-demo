@@ -18,7 +18,7 @@ services:
       retries: 3
       start_period: 30s
     environment:
-      DATABASE_URL: mysql://royaltydemo:royaltydemo@127.0.0.1:3306/royaltymanager_api?serverVersion=5.7
+      DATABASE_URL: postgresql://${POSTGRES_USER:-royaltydemo}:${POSTGRES_PASSWORD:-royaltydemo}@database:5432/${POSTGRES_DB:-royaltymanager_api}?serverVersion=${POSTGRES_VERSION:-13}
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
@@ -54,15 +54,15 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: mysql:5.7
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: royaltymanager_api
-      MYSQL_USER: royaltydemo
-      MYSQL_PASSWORD: royaltydemo
+      POSTGRES_DB: ${POSTGRES_DB:-royaltymanager_api}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-royaltydemo}
+      POSTGRES_USER: ${POSTGRES_USER:-royaltydemo}
     
     ports:
-      - "3306:3306"
+      - "5432:5432"
 ###< doctrine/doctrine-bundle ###
 
 volumes:
