@@ -89,4 +89,27 @@ class RoyaltiesController extends AbstractController
         }
     }
 
+    #[Route('/royaltymanager/payments', name: 'royalties_payments', methods:"GET")]
+    public function payments(EntityManagerInterface $em): Response
+    {
+        $payments = $em->getRepository(Payment::class)->findAll();
+
+        if( is_null($payments) ){
+            return $this->json([]);        
+        }
+
+        $paymentsResult = [];
+
+        foreach($payments as $payment){
+            $paymentsResult[] = [
+                "rightsownerid" => $payment->getRightsOwner()->getGuid(),
+                "rightsowner" => $payment->getRightsOwner()->getName(),
+                "royalty" => $payment->getRoyalty(),
+                "viewings" => $payment->getViewings()
+            ];
+        }
+
+        return $this->json($paymentsResult);
+    }
+
 }
