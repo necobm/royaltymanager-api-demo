@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Episode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,32 +48,25 @@ class EpisodeRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Episode[] Returns an array of Episode objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Check if a given Episode guid exists in database
+     * 
+     * @param string $guid
+     * @return bool
+     * @throws NoResultException
+     */
+    public function existInDatabase(string $guid): bool
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->_em->createQuery("select count(ep.id) from Episode ep where ep.guid = :guid ");
 
-    /*
-    public function findOneBySomeField($value): ?Episode
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        try{
+            $count = $query->setParameter('guid', $guid)->getSingleScalarResult();
+
+            return $count > 0;
+        }
+        catch(NoResultException $e){
+            return false;
+        }
+        
     }
-    */
 }

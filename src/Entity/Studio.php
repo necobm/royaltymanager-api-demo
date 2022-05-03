@@ -27,9 +27,13 @@ class Studio
     #[ORM\OneToMany(mappedBy: 'rightsowner', targetEntity: Episode::class)]
     private $episodes;
 
+    #[ORM\OneToMany(mappedBy: 'rightsowner', targetEntity: Payment::class)]
+    private $payments;
+
     public function __construct()
     {
         $this->episodes = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +101,36 @@ class Studio
             // set the owning side to null (unless already changed)
             if ($episode->getRightsowner() === $this) {
                 $episode->setRightsowner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments[] = $payment;
+            $payment->setRightsowner($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getRightsowner() === $this) {
+                $payment->setRightsowner(null);
             }
         }
 
