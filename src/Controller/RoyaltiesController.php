@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Episode;
 use App\Entity\Payment;
+use App\Entity\Studio;
 use App\Service\RequestDataValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -110,6 +111,32 @@ class RoyaltiesController extends AbstractController
         }
 
         return $this->json($paymentsResult);
+    }
+
+    #[Route('/royaltymanager/payments/{rightsownerGuid}', name: 'royalties_payments_rightsowner', methods:"GET")]
+    public function paymentsRightsOwner(string $rightsownerGuid, EntityManagerInterface $em): Response
+    {
+        $studio = $em->getRepository(Studio::class)->findOneByGuid($rightsownerGuid);
+
+        if( is_null($studio) ){
+            return $this->json([
+                "message" => "The rightsowner GUID given does not exist in database"
+            ], 404);
+        }
+        
+        $payment = $em->getRepository(Payment::class)->findOneBy([
+            "rightsowner" => $studio->getId() 
+        ]);
+
+        if( is_null($payment) ){
+            return $this->json([]);        
+        }
+
+        return $this->json([
+            "rightsowner" => $payment->getRightsOwner()->getName(),
+            "royalty" => $payment->getRoyalty(),
+            "viewings" => $payment->getViewings()
+        ]);
     }
 
 }
