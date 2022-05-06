@@ -21,6 +21,8 @@ class RequestDataValidator
                     throw new BadRequestException("Episode GUID and Customer GUID are mandatory");
                 }
                 break;
+            default:
+                throw new BadRequestException("Endpoint is not valid");
         }
     }
 }
